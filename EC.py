@@ -3,6 +3,7 @@ from tkinter import messagebox, filedialog
 import matplotlib.pyplot as plt
 import json
 import os
+import random
 
 def calculate_footprint(data):
     try:
@@ -72,6 +73,41 @@ def plot_pie_chart(data):
     except Exception as e:
         messagebox.showerror("Error", f"Could not plot pie chart: {e}")
 
+def get_random_suggestion():
+    suggestions = [
+        "Switch to energy-efficient light bulbs",
+        "Install solar panels",
+        "Use public transport instead of personal vehicles",
+        "Carpool to work",
+        "Reduce meat consumption",
+        "Recycle and compost waste",
+        "Plant trees in your community",
+        "Unplug devices when not in use",
+        "Use a programmable thermostat",
+        "Upgrade to energy-efficient appliances",
+        "Use cold water for laundry",
+        "Insulate your home to save energy",
+        "Reduce air travel when possible",
+        "Opt for reusable bags and containers",
+        "Avoid single-use plastics",
+        "Drive a fuel-efficient or electric car",
+        "Practice water conservation",
+        "Buy locally-produced goods",
+        "Reduce food waste",
+        "Educate others about climate change",
+        "Invest in renewable energy",
+        "Switch to a green energy provider",
+        "Work remotely to reduce commuting",
+        "Use ceiling fans instead of air conditioning",
+        "Reduce paper usage",
+        "Harvest rainwater",
+        "Advocate for environmental policies",
+        "Turn off lights when not in use",
+        "Conduct a home energy audit",
+        "Switch to an electric lawn mower"
+    ]
+    return random.choice(suggestions)
+
 def main():
     def calculate_and_display():
         data = {
@@ -86,17 +122,22 @@ def main():
 
         carbon = calculate_footprint(data)
         if carbon:
-            result_text.set(f"Total Carbon Footprint: {carbon['total']:.2f} kg CO2")
-            return carbon
-        return None
+            suggestion = ""
+            if carbon['total'] > 40000:
+                suggestion = get_random_suggestion()
+                result_text.set(f"Total Carbon Footprint: {carbon['total']:.2f} kg CO2\nSuggestion: {suggestion}")
+            else:
+                result_text.set(f"Total Carbon Footprint: {carbon['total']:.2f} kg CO2")
+            return carbon, suggestion
+        return None, ""
 
     def display_bar_graph():
-        carbon = calculate_and_display()
+        carbon, _ = calculate_and_display()
         if carbon:
             plot_bar_graph(carbon)
 
     def display_pie_chart():
-        carbon = calculate_and_display()
+        carbon, _ = calculate_and_display()
         if carbon:
             plot_pie_chart(carbon)
 
@@ -112,7 +153,12 @@ def main():
                 "travel_km": travel_km_var.get(),
                 "fuel_efficiency": fuel_efficiency_var.get(),
             }
-            save_data(data, filepath)
+            carbon, suggestion = calculate_and_display()
+            if carbon:
+                data["carbon_footprint"] = carbon
+                if suggestion:
+                    data["suggestion"] = suggestion
+                save_data(data, filepath)
 
     def load():
         filepath = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
