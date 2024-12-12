@@ -44,25 +44,33 @@ def load_data(filepath):
         messagebox.showerror("Error", f"Could not load data: {e}")
         return None
 
-def plot_graph(data):
+def plot_bar_graph(data):
     try:
         labels = list(data.keys())[:-1]  # Exclude 'total'
         values = list(data.values())[:-1]
 
-        # Bar Graph
         plt.figure(figsize=(10, 6))
         plt.bar(labels, values, color="skyblue")
         plt.title("Carbon Footprint by Category")
         plt.ylabel("kg CO2")
         plt.show()
+    except Exception as e:
+        messagebox.showerror("Error", f"Could not plot bar graph: {e}")
 
-        # Pie Chart
+def plot_pie_chart(data):
+    try:
+        labels = list(data.keys())[:-1]  # Exclude 'total'
+        values = list(data.values())[:-1]
+
+        # Replace negative values with their absolute values for plotting purposes
+        adjusted_values = [abs(value) for value in values]
+
         plt.figure(figsize=(8, 8))
-        plt.pie(values, labels=labels, autopct="%1.1f%%", startangle=140)
+        plt.pie(adjusted_values, labels=labels, autopct="%1.1f%%", startangle=140)
         plt.title("Carbon Footprint Distribution")
         plt.show()
     except Exception as e:
-        messagebox.showerror("Error", f"Could not plot graph: {e}")
+        messagebox.showerror("Error", f"Could not plot pie chart: {e}")
 
 def main():
     def calculate_and_display():
@@ -79,7 +87,18 @@ def main():
         carbon = calculate_footprint(data)
         if carbon:
             result_text.set(f"Total Carbon Footprint: {carbon['total']:.2f} kg CO2")
-            plot_graph(carbon)
+            return carbon
+        return None
+
+    def display_bar_graph():
+        carbon = calculate_and_display()
+        if carbon:
+            plot_bar_graph(carbon)
+
+    def display_pie_chart():
+        carbon = calculate_and_display()
+        if carbon:
+            plot_pie_chart(carbon)
 
     def save():
         filepath = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
@@ -139,11 +158,13 @@ def main():
 
     # Buttons
     tk.Button(root, text="Calculate", command=calculate_and_display).grid(row=len(inputs), column=0, padx=10, pady=10)
-    tk.Button(root, text="Save Data", command=save).grid(row=len(inputs), column=1, padx=10, pady=10)
-    tk.Button(root, text="Load Data", command=load).grid(row=len(inputs) + 1, column=0, columnspan=2, padx=10, pady=10)
+    tk.Button(root, text="Bar Graph", command=display_bar_graph).grid(row=len(inputs), column=1, padx=10, pady=10)
+    tk.Button(root, text="Pie Chart", command=display_pie_chart).grid(row=len(inputs) + 1, column=0, padx=10, pady=10)
+    tk.Button(root, text="Save Data", command=save).grid(row=len(inputs) + 1, column=1, padx=10, pady=10)
+    tk.Button(root, text="Load Data", command=load).grid(row=len(inputs) + 2, column=0, columnspan=2, padx=10, pady=10)
 
     # Result Display
-    tk.Label(root, textvariable=result_text, fg="blue").grid(row=len(inputs) + 2, column=0, columnspan=2, pady=10)
+    tk.Label(root, textvariable=result_text, fg="blue").grid(row=len(inputs) + 3, column=0, columnspan=2, pady=10)
 
     root.mainloop()
 
