@@ -1,0 +1,18 @@
+{
+    "electricity": "700",
+    "gas": "800",
+    "fuel": "800",
+    "waste": "10000",
+    "recycling": "-200",
+    "travel_km": "-200",
+    "fuel_efficiency": "-200",
+    "carbon_footprint": {
+        "electricity": 4.2,
+        "gas": 50.88,
+        "fuel": 22272.0,
+        "waste": 308400.0,
+        "travel": 2.31,
+        "total": 330729.39
+    },
+    "suggestion": "Install solar panels"
+}

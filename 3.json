@@ -1,0 +1,18 @@
+{
+    "electricity": "100",
+    "gas": "50",
+    "fuel": "150",
+    "waste": "100000",
+    "recycling": "-200",
+    "travel_km": "-200",
+    "fuel_efficiency": "-200",
+    "carbon_footprint": {
+        "electricity": 0.6,
+        "gas": 3.18,
+        "fuel": 4176.0,
+        "waste": 3084000.0,
+        "travel": 2.31,
+        "total": 3088182.09
+    },
+    "suggestion": "Turn off lights when not in use"
+}

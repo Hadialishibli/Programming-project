@@ -1,0 +1,9 @@
+{
+    "electricity": "12",
+    "gas": "14",
+    "fuel": "72",
+    "waste": "77",
+    "recycling": "110",
+    "travel_km": "54",
+    "fuel_efficiency": "16"
+}
